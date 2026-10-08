@@ -22,3 +22,6 @@ class Problem(object):
         Run the problem
         """
         raise NotImplementedError
+
+
+#BASE CLASS DEFINES THEREE METHODS
