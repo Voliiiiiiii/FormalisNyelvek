@@ -80,11 +80,11 @@ class RegexSearchProblem(Problem):
             rf'^{DATE} {TIME} +{PID} +{TID} W PackageManager:'
             rf'(?: {MESSAGE})?$',
             rf'^{DATE} {TIME} +{PID} +{TID} D '
-            rf'{TAG_CHAR}*ExoPlayer{TAG_CHAR}*:(?: {MESSAGE})?$',
+            rf'(?=[^\r\n]*ExoPlayer){TAG}:(?: {MESSAGE})?$',
             rf'^{DATE} {TIME} +{PID} +{TID} [EW] {TAG}:'
             rf'(?=[^\r\n]*\.java:)(?: {MESSAGE})?$',
             rf'^{DATE} {TIME} +{PID} +{TID} [IDVEFAW] {TAG}: '
-            rf'(?=[^\r\n]*\bThread\b){MESSAGE}$',
+            rf'(?=[^\r\n]*Thread){MESSAGE}$',
         )
         return [str(len(re.findall(pattern, log_text, re.MULTILINE))) for pattern in patterns]
 
