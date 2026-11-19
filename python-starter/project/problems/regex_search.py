@@ -8,7 +8,10 @@ DATE = r'[0-9-]+'
 TIME = r'[0-9:.]+'
 PID = r'[0-9]+'
 TID = r'[0-9]+'
-TAG = r'[^:\r\n]+'
+# A tag tartalmazhat ':'-ot (pl. "niss:interactor", "APM::AudioPolicyEngine/Base"),
+# a tag végét az első ": " (vagy a sor végi ':') jelzi.
+TAG_CHAR = r'(?:[^:\r\n]|:(?=[^ \r\n]))'
+TAG = rf'{TAG_CHAR}+'
 MESSAGE = r'[^\r\n]*'
 
 LOG_RECORD_RE = re.compile(
@@ -70,14 +73,14 @@ class RegexSearchProblem(Problem):
             rf'^{DATE} [0-9]{{2}}:[0-9]{{2}}:51(?:\.[0-9]+)? '
             rf'+{PID} +{TID} [IDVEFAW] {TAG}:(?: {MESSAGE})?$',
             rf'^{DATE} {TIME} +{PID} +{TID} [IDVEFAW] '
-            rf'[^:\r\n]*lowmemorykiller[^:\r\n]*:(?: {MESSAGE})?$',
+            rf'{TAG_CHAR}*lowmemorykiller{TAG_CHAR}*:(?: {MESSAGE})?$',
             rf'^{DATE} 10:18:51(?:\.[0-9]+)? +221 +{TID} '
             rf'[IDVEFAW] {TAG}:(?: {MESSAGE})?$',
             rf'^{DATE} {TIME} +{PID} +{TID} E {TAG}:(?: {MESSAGE})?$',
             rf'^{DATE} {TIME} +{PID} +{TID} W PackageManager:'
             rf'(?: {MESSAGE})?$',
             rf'^{DATE} {TIME} +{PID} +{TID} D '
-            rf'[^:\r\n]*ExoPlayer[^:\r\n]*:(?: {MESSAGE})?$',
+            rf'{TAG_CHAR}*ExoPlayer{TAG_CHAR}*:(?: {MESSAGE})?$',
             rf'^{DATE} {TIME} +{PID} +{TID} [EW] {TAG}:'
             rf'(?=[^\r\n]*\.java:)(?: {MESSAGE})?$',
             rf'^{DATE} {TIME} +{PID} +{TID} [IDVEFAW] {TAG}: '
